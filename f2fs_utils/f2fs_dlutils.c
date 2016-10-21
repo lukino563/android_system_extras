@@ -54,9 +54,10 @@ int f2fs_format_device(void) {
 	assert(f2fs_format_device_dl);
 	return f2fs_format_device_dl();
 }
-void f2fs_init_configuration(struct f2fs_configuration *config) {
+void f2fs_init_configuration(void) {
+	struct f2fs_configuration *c;
 	assert(f2fs_init_configuration_dl);
-	f2fs_init_configuration_dl(config);
+	f2fs_init_configuration_dl(c);
 }
 void flush_sparse_buffs(void) {
 	assert(flush_sparse_buffs_dl);
@@ -82,7 +83,7 @@ int dlopenf2fs() {
 	flush_sparse_buffs_dl = dlsym(f2fs_lib, "flush_sparse_buffs");
 	init_sparse_file_dl = dlsym(f2fs_lib, "init_sparse_file");
 	finalize_sparse_file_dl = dlsym(f2fs_lib, "finalize_sparse_file");
-	f2fs_config = dlsym(f2fs_lib, "config");
+	f2fs_config = dlsym(f2fs_lib, "c");
 	if (!f2fs_format_device_dl || !f2fs_init_configuration_dl ||
 			!flush_sparse_buffs_dl || !f2fs_config ||
 			!init_sparse_file_dl || !finalize_sparse_file_dl) {

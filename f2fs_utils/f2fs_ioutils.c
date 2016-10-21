@@ -85,7 +85,7 @@ struct selabel_handle;
 
 #endif
 
-struct f2fs_configuration config;
+struct f2fs_configuration c;
 struct sparse_file *f2fs_sparse_file;
 
 struct buf_item {
@@ -98,9 +98,9 @@ struct buf_item *buf_list;
 
 static int dev_write_fd(void *buf, __u64 offset, size_t len)
 {
-	if (lseek64(config.fd, (off64_t)offset, SEEK_SET) < 0)
+	if (lseek64(c.fd, (off64_t)offset, SEEK_SET) < 0)
 		return -1;
-	if (write(config.fd, buf, len) != len)
+	if (write(c.fd, buf, len) != len)
 		return -1;
 	return 0;
 }
@@ -148,13 +148,8 @@ void finalize_sparse_file(int fd)
 	sparse_file_destroy(f2fs_sparse_file);
 }
 
-void f2fs_finalize_device(struct f2fs_configuration *c)
+void f2fs_finalize_device(void)
 {
-}
-
-int f2fs_trim_device()
-{
-	return 0;
 }
 
 /*
@@ -172,7 +167,7 @@ int dev_read(void  *buf, __u64 offset, size_t len)
 
 int dev_write(void *buf, __u64 offset, size_t len)
 {
-	if (config.fd >= 0) {
+	if (c.fd >= 0) {
 		return dev_write_fd(buf, offset, len);
 	} else {
 		return dev_write_sparse(buf, offset, len);
@@ -183,7 +178,7 @@ int dev_write(void *buf, __u64 offset, size_t len)
 int dev_fill(void *buf, __u64 offset, size_t len)
 {
 	int ret;
-	if (config.fd >= 0) {
+	if (c.fd >= 0) {
 		return dev_write_fd(buf, offset, len);
 	}
         // sparse file fills with zero by default.

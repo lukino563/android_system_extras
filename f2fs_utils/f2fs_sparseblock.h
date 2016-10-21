@@ -21,10 +21,6 @@
 extern "C" {
 #endif
 
-
-
-
-
 #define ver_after(a, b) (typecheck(unsigned long long, a) &&            \
     typecheck(unsigned long long, b) &&                     \
     ((long long)((a) - (b)) > 0))
