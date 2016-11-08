@@ -84,6 +84,7 @@ LOCAL_SRC_FILES := $(libext4_utils_src_files) \
     ext4_crypt_init_extensions.cpp
 LOCAL_MODULE := libext4_utils_static
 LOCAL_STATIC_LIBRARIES := \
+    libmincrypt \
     libsparse_static
 
 ifeq ($(BOARD_SUPPRESS_EMMC_WIPE),true)
@@ -92,16 +93,21 @@ endif
 
 include $(BUILD_STATIC_LIBRARY)
 
-
 include $(CLEAR_VARS)
 LOCAL_SRC_FILES := make_ext4fs_main.c
 LOCAL_MODULE := make_ext4fs
-LOCAL_SHARED_LIBRARIES := \
+LOCAL_MODULE_TAGS := optional
+LOCAL_FORCE_STATIC_EXECUTABLE := true
+LOCAL_STATIC_LIBRARIES += \
+    libc \
+    libext2_uuid_static \
+    libext4_utils_static \
     libcutils \
-    libext2_uuid \
-    libext4_utils \
     libselinux \
-    libz
+    libsparse_static \
+    libz \
+    libmincrypt \
+    liblog
 LOCAL_CFLAGS := -DREAL_UUID
 include $(BUILD_EXECUTABLE)
 
